@@ -12,7 +12,6 @@ import (
 func main() {
 	r := httprouter.New()
 
-	// Get a UserController instance
 	uc := controllers.NewUserController(getSession())
 
 	r.GET("/user/:id", uc.GetUser)
