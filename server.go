@@ -1,39 +1,35 @@
 package main
 
 import (
-    // Standard library packages
-    "encoding/json"
-    "fmt"
-    "net/http"
+	"net/http"
 
-    // Third party packages
-    "github.com/julienschmidt/httprouter"
-    "github.com/RenatoAraujo/go-restful-application/models"
+	"gopkg.in/mgo.v2"
+
+	"github.com/RenatoAraujo/go-restful-application/controllers"
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-    // Instantiate a new router
-    r := httprouter.New()
+	r := httprouter.New()
 
-    // Get a user resource
-    r.GET("/user/:id", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-        // Stub an example user
-        u := models.User {
-            Name:   "Renato Rodrigues de Araujo",
-            Gender: "Male",
-            Age:    23,
-            Id:     p.ByName("id"),
-        }
+	// Get a UserController instance
+	uc := controllers.NewUserController(getSession())
 
-        // Marshal provided interface into JSON structure
-        uj, _ := json.Marshal(u)
+	r.GET("/user/:id", uc.GetUser)
 
-        // Write content-type, statuscode, payload
-        w.Header().Set("Content-Type", "application/json")
-        w.WriteHeader(200)
-        fmt.Fprintf(w, "%s", uj)
-    })
+	r.POST("/user", uc.CreateUser)
 
-    // Fire up the server
-    http.ListenAndServe("localhost:3000", r)
+	r.DELETE("/user/:id", uc.RemoveUser)
+
+	http.ListenAndServe("localhost:3000", r)
+}
+
+func getSession() *mgo.Session {
+	s, err := mgo.Dial("mongodb://localhost")
+
+	if err != nil {
+		panic(err)
+	}
+
+	return s
 }
