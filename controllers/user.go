@@ -42,6 +42,7 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 	uj, _ := json.Marshal(u)
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(200)
 	fmt.Fprintf(w, "%s", uj)
 }
@@ -58,6 +59,7 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 	uj, _ := json.Marshal(u)
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(201)
 	fmt.Fprintf(w, "%s", uj)
 }
