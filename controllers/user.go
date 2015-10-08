@@ -34,7 +34,7 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 
 	u := models.User{}
 
-	if err := uc.session.DB("go_rest_tutorial").C("users").FindId(oid).One(&u); err != nil {
+	if err := uc.session.DB("go_restfull_application").C("users").FindId(oid).One(&u); err != nil {
 		w.WriteHeader(404)
 		return
 	}
@@ -53,7 +53,7 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 
 	u.Id = bson.NewObjectId()
 
-	uc.session.DB("go_rest_tutorial").C("users").Insert(u)
+	uc.session.DB("go_restfull_application").C("users").Insert(u)
 
 	uj, _ := json.Marshal(u)
 
@@ -72,7 +72,7 @@ func (uc UserController) RemoveUser(w http.ResponseWriter, r *http.Request, p ht
 
 	oid := bson.ObjectIdHex(id)
 
-	if err := uc.session.DB("go_rest_tutorial").C("users").RemoveId(oid); err != nil {
+	if err := uc.session.DB("go_restfull_application").C("users").RemoveId(oid); err != nil {
 		w.WriteHeader(404)
 		return
 	}
